@@ -22,7 +22,7 @@ public class PushIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        if (intent != null && intent.hasExtra("alert") && intent.hasExtra("user_jid")) {
+        if (intent != null && intent.hasExtra("alert") && intent.hasExtra("user_jid") && intent.hasExtra("target_id")) {
 
             String url = "http://123.57.175.166/newmuhua/v1.0/System/pushNotification";
 
@@ -30,8 +30,8 @@ public class PushIntentService extends IntentService {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("alert", intent.getStringExtra("alert"));
             params.put("pushType", PushTypeConfig.CHAT_MESSAGE);
-
             params.put("userJid", intent.getStringExtra("user_jid"));
+            params.put("target_id",intent.getStringExtra("target_id"));
 
             Log.e("params", params.toString());
 

@@ -36,11 +36,11 @@ public class PushReceiver extends BroadcastReceiver {
                         return;
 
                     final String push_type = json.has("pushType") ?json.getString("pushType"):"";
-                    final String traget_id = json.has("target_id")?json.getString("target_id"):"";
+                    final String target_id = json.has("target_id")?json.getString("target_id"):"";
 
-                    sendLocalBroadcast(context,push_type,traget_id);
+                    sendLocalBroadcast(context,push_type,target_id);
 
-                    sendPushNotification(push_type,traget_id ,message);
+                    sendPushNotification(push_type,target_id ,message);
                 }
             }
         } catch (JSONException e) {
@@ -52,26 +52,26 @@ public class PushReceiver extends BroadcastReceiver {
      * 發送推播LocalBroadcast訊息
      * @param context
      * @param push_type
-     * @param traget_id
+     * @param target_id
      */
-    private void sendLocalBroadcast(Context context,String push_type,String traget_id){
+    private void sendLocalBroadcast(Context context,String push_type,String target_id){
         Intent intent = new Intent(PushUtil.PUSH_ACTION);
         intent.putExtra("pushType", push_type);
-        intent.putExtra("target_id", traget_id);
+        intent.putExtra("target_id", target_id);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     /**
      * 發送推播Notification訊息
      * @param push_type
-     * @param traget_id
+     * @param target_id
      * @param message
      */
-    private void sendPushNotification(String push_type,String traget_id,String message){
+    private void sendPushNotification(String push_type,String target_id,String message){
         Intent resultIntent = new Intent(AVOSCloud.applicationContext, MainActivity.class);
         resultIntent.setAction(PushUtil.PUSH_ACTION);
         resultIntent.putExtra("pushType", push_type);
-        resultIntent.putExtra("target_id", traget_id);
+        resultIntent.putExtra("target_id", target_id);
 
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(AVOSCloud.applicationContext, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);

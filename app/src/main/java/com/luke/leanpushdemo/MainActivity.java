@@ -20,6 +20,7 @@ import com.avos.avoscloud.SaveCallback;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    private String myJid = "android_luke_test";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         PushService.setDefaultPushCallback(this, MainActivity.class);
 
-        AVInstallation.getCurrentInstallation().put("userJid", "android_luke_test");
+        AVInstallation.getCurrentInstallation().put("userJid", myJid);
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
@@ -45,7 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        PushUtil.sendChatPush(this, ((EditText) findViewById(R.id.et_jid)).getText().toString(), "Luke", PushUtil.MessageTypeText, ((EditText) findViewById(R.id.et_alert)).getText().toString());
+        PushUtil.sendChatPush(this, ((EditText) findViewById(R.id.et_jid)).getText().toString(), "Luke", PushUtil.MessageTypeText, ((EditText) findViewById(R.id.et_alert)).getText().toString(),myJid);
     }
 
     @Override
@@ -61,6 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("pushType") && intent.hasExtra("target_id")){
                 Log.e("mPushMessageReceiver","pushType:"+intent.getStringExtra("pushType")+",target_id:"+intent.getStringExtra("target_id"));
+                ((EditText)findViewById(R.id.et_bocas)).setText("pushType:" + intent.getStringExtra("pushType") + ",target_id:" + intent.getStringExtra("target_id"));
 
                 if (intent.getStringExtra("pushType").equals(PushTypeConfig.CHAT_MESSAGE)){
 //                    有CHAT_MESSAGE類型推播進來
@@ -80,6 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (intent != null && intent.getAction() != null && intent.getAction().equals(PushUtil.PUSH_ACTION)) {
             if (intent.hasExtra("pushType") && intent.hasExtra("target_id")) {
                 Log.e("getPushIntent","pushType:"+intent.getStringExtra("pushType")+",target_id:"+intent.getStringExtra("target_id"));
+                ((EditText)findViewById(R.id.et_notif)).setText("pushType:"+intent.getStringExtra("pushType")+",target_id:"+intent.getStringExtra("target_id"));
 
                 switch (intent.getStringExtra("pushType")) {
                     case PushTypeConfig.CHAT_MESSAGE:

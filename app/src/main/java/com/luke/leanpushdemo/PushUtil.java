@@ -24,8 +24,9 @@ public class PushUtil {
      * @param my_name  自己的名字
      * @param type     聊天訊息類型
      * @param msg      聊天訊息
+     * @param my_jid   我的xmpp jid
      */
-    public static void sendChatPush(Context ctx, String user_jid, String my_name, int type, String msg) {
+    public static void sendChatPush(Context ctx, String user_jid, String my_name, int type, String msg ,String my_jid) {
         if (!TextUtils.isEmpty(user_jid) && !TextUtils.isEmpty(my_name)) {
 
             String alert = "";
@@ -47,7 +48,6 @@ public class PushUtil {
                 case MessageTypeLocation:
                     alert = String.format(ctx.getString(R.string.msg_type_location), my_name);
                     break;
-
                 default:
                     alert = String.format(ctx.getString(R.string.msg_type_other), my_name);
                     break;
@@ -56,6 +56,7 @@ public class PushUtil {
             Intent i = new Intent(ctx, PushIntentService.class);
             i.putExtra("alert", alert);
             i.putExtra("user_jid", user_jid);
+            i.putExtra("target_id", user_jid);
             ctx.startService(i);
         }
     }
